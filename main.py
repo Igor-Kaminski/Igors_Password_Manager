@@ -6,7 +6,7 @@ Features: Master password protection, 3-attempt limit, 10-minute lockout
 """
 
 from getpass import getpass
-from crypto import hash_master_password, generate_salt, verify_master_password, derive_encryption_key
+from crypto import verify_master_password, derive_encryption_key
 from vault import create_vault, save_vault, vault_exists, load_vault
 from ui_functionality import (
     display_passwords, 
@@ -26,8 +26,7 @@ def build_ui(vault,key):
         "2": add_password,
         "3": edit_password,
         "4": delete_password,
-        "5": search_passwords,
-        "6": quit_app
+        "5": quit_app
     }
     
     while True:
@@ -40,15 +39,14 @@ def build_ui(vault,key):
         print("2. Add Password")
         print("3. Edit Password") 
         print("4. Delete Password")
-        print("5. Search Passwords")
-        print("6. Quit")
+        print("5. Quit")
         
-        choice = input("\nSelect option (1-6): ")
+        choice = input("\nSelect option (1-5): ")
         
         if choice in menu_actions:
             menu_actions[choice](vault,key)
         else:
-            print("❌ Invalid choice. Please select 1-6.")
+            print("Invalid choice. Please select 1-5.")
 
 
 def main():

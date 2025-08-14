@@ -31,17 +31,23 @@ def display_passwords(vault,key):
         
         print("\nOptions:")
         print("1. Go back to main menu")
-        print("2. View passwords again")
+        print("2. Edit an entry")
+        print("3. Search through entries")
+        print("4. View passwords again")
         
-        choice = input("\nSelect option (1-2): ")
+        choice = input("\nSelect option (1-4): ")
         
         if choice == "1":
             print("Returning to main menu...\n")
             break
         elif choice == "2":
+            edit_password(vault,key)
+        elif choice == "3":
             continue
+        elif choice =="4":
+            search_passwords(vault,key)
         else:
-            print("Invalid choice. Please select 1-2.\n")
+            print("Invalid choice. Please select 1-4.\n")
 
 
 def add_password(vault,key):
@@ -68,9 +74,66 @@ def add_password(vault,key):
     print("Adding password...")
 
 def edit_password(vault,key):
+    if not vault.entries:
+        print("No passwords to edit.\n")
+        return
     
+    while True:
+        print("\n" + "="*60)
+        print("EDIT PASSWORDS")
+        print("="*60)
+        
+        print("Enter the website name or entry number to edit")
+        print("Or type 'Q' to quit to main menu")
+        
+        entry_input = input("\nEnter website name/number: ").strip()
+        
+        if entry_input.upper() == "Q":
+            print("Returning to main menu...\n")
+            break
+        
+        try:
+            entry_num = int(entry_input) - 1
+            if 0 <= entry_num < len(vault.entries):
+                entry_to_edit = vault.entries[entry_num]
+            else:
+                print("Invalid entry number.")
+                continue
+        except ValueError:
+            entry_to_edit = None
+            for entry in vault.entries:
+                if entry_input.lower() == entry.website.lower():
+                    entry_to_edit = entry
+                    break
+            
+            if not entry_to_edit:
+                print(" Website not found.")
+                continue
+        
+        print(f"\nEditing: {entry_to_edit.website}")
+        print("="*40)
+        
+        website = input(f"Website ({entry_to_edit.website}): ").strip() or entry_to_edit.website
+        username = input(f"Username ({entry_to_edit.username}): ").strip() or entry_to_edit.username
+        password = input("New password (leave blank to keep current): ").strip()
+        
+        entry_to_edit.website = website
+        entry_to_edit.username = username
+        
+        if password:
+            entry_to_edit.password = encrypt_password(password, key)
+        
+        notes_option = input("Update notes? (Y/n): ")
+        if notes_option.lower() in ['y', 'yes']:
+            new_notes = input("Enter new notes: ")
+            entry_to_edit.notes = new_notes
+        
+        vault.last_modified = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        save_vault(vault)
+        
+        print(f"\n Successfully updated {entry_to_edit.website}!")
+        break
 
-    print("Editing password...")
 
 def delete_password(vault,key):
     print("Deleting password...")
