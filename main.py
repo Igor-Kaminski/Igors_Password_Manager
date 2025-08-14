@@ -8,10 +8,47 @@ Features: Master password protection, 3-attempt limit, 10-minute lockout
 from getpass import getpass
 from crypto import hash_master_password, generate_salt, verify_master_password
 from vault import create_vault, save_vault, vault_exists, load_vault
+from ui_functionality import (
+    display_passwords, 
+    add_password, 
+    edit_password, 
+    delete_password, 
+    search_passwords, 
+    quit_app
+)
 
 
-def build_ui():
-    pass
+def build_ui(vault):
+    """Main password management interface."""
+    
+    menu_actions = {
+        "1": display_passwords,
+        "2": add_password,
+        "3": edit_password,
+        "4": delete_password,
+        "5": search_passwords,
+        "6": quit_app
+    }
+    
+    while True:
+        print("\n" + "="*50)
+        print("🔐 PASSWORD VAULT")
+        print("="*50)
+        
+        print("\n Options:")
+        print("1. Display Passwords")
+        print("2. Add Password")
+        print("3. Edit Password") 
+        print("4. Delete Password")
+        print("5. Search Passwords")
+        print("6. Quit")
+        
+        choice = input("\nSelect option (1-6): ")
+        
+        if choice in menu_actions:
+            menu_actions[choice](vault)
+        else:
+            print("❌ Invalid choice. Please select 1-6.")
 
 
 def main():
@@ -49,7 +86,7 @@ def main():
         
         if verify_master_password(vault, password_attempt):
             print("Access granted!")
-            build_ui()
+            build_ui(vault)
             break
         else:
             attempts += 1
