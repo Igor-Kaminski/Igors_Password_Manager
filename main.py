@@ -5,6 +5,8 @@ Simple Terminal Password Manager
 Features: Master password protection, 3-attempt limit, 10-minute lockout
 """
 
+import os
+
 from getpass import getpass
 from crypto import verify_master_password, derive_encryption_key
 from vault import create_vault, save_vault, vault_exists, load_vault
@@ -14,7 +16,8 @@ from ui_functionality import (
     edit_password, 
     delete_password, 
     search_passwords, 
-    quit_app
+    quit_app,
+    clear_screen
 )
 
 
@@ -27,7 +30,8 @@ def build_ui(vault,key):
         "3": edit_password,
         "4": delete_password,
         "5": search_passwords,
-        "6": quit_app
+        "6": clear_screen,
+        "7": quit_app
     }
     
     while True:
@@ -41,14 +45,15 @@ def build_ui(vault,key):
         print("3. Edit Password") 
         print("4. Delete Password")
         print("5. Search Passwords")
-        print("6. Quit")
+        print("6. Clear Screen")
+        print("7. Quit")
         
-        choice = input("\nSelect option (1-6): ")
+        choice = input("\nSelect option (1-7): ")
         
         if choice in menu_actions:
             menu_actions[choice](vault,key)
         else:
-            print("Invalid choice. Please select 1-6.")
+            print("Invalid choice. Please select 1-7.")
 
 
 def main():

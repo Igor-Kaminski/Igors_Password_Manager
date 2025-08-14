@@ -2,6 +2,8 @@
 UI Functions
 """
 
+import os
+
 from models import PasswordEntry
 from vault import save_vault
 from datetime import datetime
@@ -136,7 +138,76 @@ def edit_password(vault,key):
 
 
 def delete_password(vault,key):
-    print("Deleting password...")
+    if not vault.entries:
+        print("No passwords to delete.\n")
+        return
+    
+    while True:
+        print("\n" + "="*60)
+        print("DELETE AN ENTRY")
+        print("="*60)
+
+        print("Enter the website name or entry number to delete")
+        print("Or type 'Q' to quit to main menu")
+        
+        entry_input = input("\nEnter website name/number: ").strip()
+        
+        if entry_input.upper() == "Q":
+            print("Returning to main menu...\n")
+            break
+        
+        try:
+            entry_num = int(entry_input) - 1
+            if 0 <= entry_num < len(vault.entries):
+                entry_to_delete = vault.entries[entry_num]
+            else:
+                print("Invalid entry number.")
+                continue
+        except ValueError:
+            entry_to_delete = None
+            for entry in vault.entries:
+                if entry_input.lower() == entry.website.lower():
+                    entry_to_delete = entry
+                    break
+            
+            if not entry_to_delete:
+                print("Website not found.")
+                continue
+        
+        print(f"\nEntry to delete: {entry_to_delete.website}")
+        print("="*40)
+        decrypted_password = decrypt_password(entry_to_delete.password, key)
+        print(f"Website: {entry_to_delete.website}")
+        print(f"Username: {entry_to_delete.username}")
+        print(f"Password: {decrypted_password}")
+        if entry_to_delete.notes:
+            print(f"Notes: {entry_to_delete.notes}")
+        print("-" * 40)
+        
+        confirm = input(f"\nAre you sure you want to delete {entry_to_delete.website}? (Y/n): ")
+        if confirm.lower() in ['y', 'yes']:
+            vault.entries.remove(entry_to_delete)
+            vault.last_modified = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            save_vault(vault)
+            print(f"Successfully deleted {entry_to_delete.website}!")
+        else:
+            print("Deletion cancelled.")
+        
+        print("\nOptions:")
+        print("1. Go back to main menu")
+        print("2. Delete another entry")
+        
+        choice = input("\nSelect option (1-2): ")
+        
+        if choice == "1":
+            print("Returning to main menu...\n")
+            break
+        elif choice == "2":
+            continue
+        else:
+            print("Invalid choice. Please select 1-2.\n")
+
+        
     
 def search_passwords(vault,key):
     while True:
@@ -159,7 +230,6 @@ def search_passwords(vault,key):
             entry_num = int(entry_input) - 1
             if 0 <= entry_num < len(vault.entries):
                 entry_to_show = vault.entries[entry_num]
-                print(entry_to_show)
             else:
                 print("Invalid entry number.")
                 continue
@@ -200,7 +270,10 @@ def search_passwords(vault,key):
 
 
     
-
 def quit_app(vault,key):
     print("Goodbye!")
     exit()
+
+
+def clear_screen(vault, key):
+    os.system('cls' if os.name == 'nt' else 'clear')
