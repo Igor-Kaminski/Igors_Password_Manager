@@ -26,7 +26,8 @@ def build_ui(vault,key):
         "2": add_password,
         "3": edit_password,
         "4": delete_password,
-        "5": quit_app
+        "5": search_passwords,
+        "6": quit_app
     }
     
     while True:
@@ -39,14 +40,15 @@ def build_ui(vault,key):
         print("2. Add Password")
         print("3. Edit Password") 
         print("4. Delete Password")
-        print("5. Quit")
+        print("5. Search Passwords")
+        print("6. Quit")
         
-        choice = input("\nSelect option (1-5): ")
+        choice = input("\nSelect option (1-6): ")
         
         if choice in menu_actions:
             menu_actions[choice](vault,key)
         else:
-            print("Invalid choice. Please select 1-5.")
+            print("Invalid choice. Please select 1-6.")
 
 
 def main():

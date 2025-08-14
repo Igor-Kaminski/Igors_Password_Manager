@@ -43,9 +43,9 @@ def display_passwords(vault,key):
         elif choice == "2":
             edit_password(vault,key)
         elif choice == "3":
-            continue
-        elif choice =="4":
             search_passwords(vault,key)
+        elif choice =="4":
+            continue
         else:
             print("Invalid choice. Please select 1-4.\n")
 
@@ -139,7 +139,67 @@ def delete_password(vault,key):
     print("Deleting password...")
     
 def search_passwords(vault,key):
-    print("Searching passwords...")
+    while True:
+        print("\n" + "="*60)
+        print("Search through Entries")
+        print("="*60)
+
+        print("Enter the website name or entry number to search")
+        print("Or type 'Q' to quit to main menu")
+        
+        entry_input = input("\nEnter website name/number: ").strip()
+    
+        
+        if entry_input.upper() == "Q":
+            print("Returning to main menu...\n")
+            break
+        
+        try:
+            print(f"\nSearching for: {entry_input}")
+            entry_num = int(entry_input) - 1
+            if 0 <= entry_num < len(vault.entries):
+                entry_to_show = vault.entries[entry_num]
+                print(entry_to_show)
+            else:
+                print("Invalid entry number.")
+                continue
+        except ValueError:
+            entry_to_show = None
+            for entry in vault.entries:
+                if entry_input.lower() == entry.website.lower():
+                    entry_to_show = entry
+                    break
+            
+            if not entry_to_show:
+                print(" Website not found.")
+                continue
+        
+        print(f"\nEntry found: {entry_to_show.website}")
+        print("="*40)
+        decrypted_password = decrypt_password(entry_to_show.password, key)
+        print(f"Website: {entry_to_show.website}")
+        print(f"Username: {entry_to_show.username}")
+        print(f"Password: {decrypted_password}")
+        if entry_to_show.notes:
+            print(f"Notes: {entry_to_show.notes}")
+        print("-" * 40)
+        
+        print("\nOptions:")
+        print("1. Go back to main menu")
+        print("2. Search again")
+        
+        choice = input("\nSelect option (1-2): ")
+        
+        if choice == "1":
+            print("Returning to main menu...\n")
+            break
+        elif choice == "2":
+            continue
+        else:
+            print("Invalid choice. Please select 1-2.\n")
+
+
+    
 
 def quit_app(vault,key):
     print("Goodbye!")
