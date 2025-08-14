@@ -6,7 +6,7 @@ class PasswordEntry:
     website: str
     username: str
     password: str
-    notes = None
+    notes: str = None
     
     def to_dict(self):
         """Convert to dictionary for JSON serialization."""

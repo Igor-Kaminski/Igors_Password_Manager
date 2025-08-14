@@ -6,7 +6,7 @@ Features: Master password protection, 3-attempt limit, 10-minute lockout
 """
 
 from getpass import getpass
-from crypto import hash_master_password, generate_salt, verify_master_password
+from crypto import hash_master_password, generate_salt, verify_master_password, derive_encryption_key
 from vault import create_vault, save_vault, vault_exists, load_vault
 from ui_functionality import (
     display_passwords, 
@@ -18,7 +18,7 @@ from ui_functionality import (
 )
 
 
-def build_ui(vault):
+def build_ui(vault,key):
     """Main password management interface."""
     
     menu_actions = {
@@ -46,7 +46,7 @@ def build_ui(vault):
         choice = input("\nSelect option (1-6): ")
         
         if choice in menu_actions:
-            menu_actions[choice](vault)
+            menu_actions[choice](vault,key)
         else:
             print("❌ Invalid choice. Please select 1-6.")
 
@@ -86,7 +86,8 @@ def main():
         
         if verify_master_password(vault, password_attempt):
             print("Access granted!")
-            build_ui(vault)
+            key=derive_encryption_key(password_attempt,vault.master_salt)
+            build_ui(vault,key)
             break
         else:
             attempts += 1
