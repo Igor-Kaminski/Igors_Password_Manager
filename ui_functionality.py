@@ -36,8 +36,9 @@ def display_passwords(vault,key):
         print("2. Edit an entry")
         print("3. Search through entries")
         print("4. View passwords again")
+        print("5. Quit")
         
-        choice = input("\nSelect option (1-4): ")
+        choice = input("\nSelect option (1-5): ")
         
         if choice == "1":
             print("Returning to main menu...\n")
@@ -48,6 +49,8 @@ def display_passwords(vault,key):
             search_passwords(vault,key)
         elif choice =="4":
             continue
+        elif choice =="5":
+            quit_app(vault,key)
         else:
             print("Invalid choice. Please select 1-4.\n")
 
@@ -271,7 +274,7 @@ def search_passwords(vault,key):
 
     
 def quit_app(vault,key):
-    print("Goodbye!")
+    os.system('cls' if os.name == 'nt' else 'clear')
     exit()
 
 
