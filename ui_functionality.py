@@ -11,6 +11,7 @@ from crypto import encrypt_password, decrypt_password
 
 
 def display_passwords(vault,key):
+    clear_screen(vault, key)
     if not vault.entries:
         print("No passwords stored yet.\n")
         return
@@ -41,13 +42,18 @@ def display_passwords(vault,key):
         choice = input("\nSelect option (1-5): ")
         
         if choice == "1":
-            print("Returning to main menu...\n")
+            clear_screen(vault,key)
             break
         elif choice == "2":
+            clear_screen(vault, key)
             edit_password(vault,key)
+            clear_screen(vault, key)
         elif choice == "3":
+            clear_screen(vault, key)
             search_passwords(vault,key)
+            clear_screen(vault, key)
         elif choice =="4":
+            clear_screen(vault, key)
             continue
         elif choice =="5":
             quit_app(vault,key)
@@ -56,6 +62,7 @@ def display_passwords(vault,key):
 
 
 def add_password(vault,key):
+    clear_screen(vault, key)
     accepted_inputs = ["Y",'y','Yes','YES']
 
     website = input("Website:")
@@ -79,6 +86,7 @@ def add_password(vault,key):
     print("Adding password...")
 
 def edit_password(vault,key):
+    clear_screen(vault, key)
     if not vault.entries:
         print("No passwords to edit.\n")
         return
@@ -94,7 +102,7 @@ def edit_password(vault,key):
         entry_input = input("\nEnter website name/number: ").strip()
         
         if entry_input.upper() == "Q":
-            print("Returning to main menu...\n")
+            clear_screen(vault,key)
             break
         
         try:
@@ -102,6 +110,7 @@ def edit_password(vault,key):
             if 0 <= entry_num < len(vault.entries):
                 entry_to_edit = vault.entries[entry_num]
             else:
+                clear_screen(vault,key)
                 print("Invalid entry number.")
                 continue
         except ValueError:
@@ -112,9 +121,11 @@ def edit_password(vault,key):
                     break
             
             if not entry_to_edit:
+                clear_screen(vault,key)
                 print(" Website not found.")
                 continue
         
+        clear_screen(vault, key)
         print(f"\nEditing: {entry_to_edit.website}")
         print("="*40)
         
@@ -135,12 +146,13 @@ def edit_password(vault,key):
         
         vault.last_modified = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         save_vault(vault)
-        
+        clear_screen(vault,key)
         print(f"\n Successfully updated {entry_to_edit.website}!")
         break
 
 
 def delete_password(vault,key):
+    clear_screen(vault, key)
     if not vault.entries:
         print("No passwords to delete.\n")
         return
@@ -156,7 +168,7 @@ def delete_password(vault,key):
         entry_input = input("\nEnter website name/number: ").strip()
         
         if entry_input.upper() == "Q":
-            print("Returning to main menu...\n")
+            clear_screen(vault,key)
             break
         
         try:
@@ -174,9 +186,11 @@ def delete_password(vault,key):
                     break
             
             if not entry_to_delete:
+                clear_screen(vault,key)
                 print("Website not found.")
                 continue
         
+        clear_screen(vault, key)
         print(f"\nEntry to delete: {entry_to_delete.website}")
         print("="*40)
         decrypted_password = decrypt_password(entry_to_delete.password, key)
@@ -192,9 +206,12 @@ def delete_password(vault,key):
             vault.entries.remove(entry_to_delete)
             vault.last_modified = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             save_vault(vault)
+            clear_screen(vault,key)
             print(f"Successfully deleted {entry_to_delete.website}!")
+
         else:
             print("Deletion cancelled.")
+            clear_screen(vault,key)
         
         print("\nOptions:")
         print("1. Go back to main menu")
@@ -203,16 +220,19 @@ def delete_password(vault,key):
         choice = input("\nSelect option (1-2): ")
         
         if choice == "1":
-            print("Returning to main menu...\n")
+            clear_screen(vault,key)
             break
         elif choice == "2":
+            clear_screen(vault, key)
             continue
         else:
+            clear_screen(vault,key)
             print("Invalid choice. Please select 1-2.\n")
 
         
     
 def search_passwords(vault,key):
+    clear_screen(vault, key)
     while True:
         print("\n" + "="*60)
         print("Search through Entries")
@@ -225,7 +245,7 @@ def search_passwords(vault,key):
     
         
         if entry_input.upper() == "Q":
-            print("Returning to main menu...\n")
+            clear_screen(vault, key)
             break
         
         try:
@@ -234,6 +254,7 @@ def search_passwords(vault,key):
             if 0 <= entry_num < len(vault.entries):
                 entry_to_show = vault.entries[entry_num]
             else:
+                clear_screen(vault,key)
                 print("Invalid entry number.")
                 continue
         except ValueError:
@@ -244,9 +265,11 @@ def search_passwords(vault,key):
                     break
             
             if not entry_to_show:
+                clear_screen(vault,key)
                 print(" Website not found.")
                 continue
         
+        clear_screen(vault, key)
         print(f"\nEntry found: {entry_to_show.website}")
         print("="*40)
         decrypted_password = decrypt_password(entry_to_show.password, key)
@@ -264,11 +287,13 @@ def search_passwords(vault,key):
         choice = input("\nSelect option (1-2): ")
         
         if choice == "1":
-            print("Returning to main menu...\n")
+            clear_screen(vault,key)
             break
         elif choice == "2":
+            clear_screen(vault, key)
             continue
         else:
+            clear_screen(vault,key)
             print("Invalid choice. Please select 1-2.\n")
 
 

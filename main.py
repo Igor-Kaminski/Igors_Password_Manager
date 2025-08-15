@@ -51,6 +51,7 @@ def build_ui(vault,key):
         choice = input("\nSelect option (1-7): ")
         
         if choice in menu_actions:
+            clear_screen(vault,key)
             menu_actions[choice](vault,key)
         else:
             print("Invalid choice. Please select 1-7.")
@@ -92,6 +93,7 @@ def main():
         if verify_master_password(vault, password_attempt):
             print("Access granted!")
             key=derive_encryption_key(password_attempt,vault.master_salt)
+            clear_screen(vault,key)
             build_ui(vault,key)
             break
         else:
