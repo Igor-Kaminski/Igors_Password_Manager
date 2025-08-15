@@ -4,14 +4,17 @@ import json
 from datetime import datetime
 from crypto import hash_master_password, generate_salt
 
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+
 def vault_exists():
     """Check if vault directory and vault.json file exist."""
-    vault_file = "vault/vault.json"
+    vault_file = os.path.join(SCRIPT_DIR, "vault", "vault.json")
     return os.path.exists(vault_file)
 
 def create_vault(master_password):
     """Create a new vault for storing passwords."""
-    vault_dir = "vault"  
+    vault_dir = os.path.join(SCRIPT_DIR, "vault")
     
     os.makedirs(vault_dir, exist_ok=True)
     
@@ -31,14 +34,14 @@ def create_vault(master_password):
 
 def save_vault(vault):
     """Save vault to file."""
-    vault_file = "vault/vault.json" 
+    vault_file = os.path.join(SCRIPT_DIR, "vault", "vault.json")
     
     with open(vault_file, 'w') as f:
         json.dump(vault.to_dict(), f, indent=2)
 
 def load_vault():
     """Load vault from file if it exists."""
-    vault_file = "vault/vault.json" 
+    vault_file = os.path.join(SCRIPT_DIR, "vault", "vault.json")
     
     if os.path.exists(vault_file):
         with open(vault_file, 'r') as f:
